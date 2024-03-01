@@ -52,7 +52,7 @@ class BaseTransformer(pl.LightningModule):
         "Initialize a model."
 
         super().__init__()
-        self.hparams = hparams
+        self.save_hyperparameters(hparams)
         cache_dir = self.hparams.cache_dir if self.hparams.cache_dir else None
         self.config = AutoConfig.from_pretrained(
             self.hparams.config_name if self.hparams.config_name else self.hparams.model_name_or_path,
@@ -267,10 +267,8 @@ def generic_train(model: BaseTransformer, args: argparse.Namespace,
         accumulate_grad_batches=args.gradient_accumulation_steps,
         gpus=args.n_gpu,
         max_epochs=args.num_train_epochs,
-        early_stop_callback=early_stopping_callback,
+        callbacks=[early_stopping_callback, checkpoint_callback, LoggingCallback()]
         gradient_clip_val=args.max_grad_norm,
-        checkpoint_callback=checkpoint_callback,
-        callbacks=[LoggingCallback()],
         log_save_interval=1,
         num_sanity_val_steps=4,
         reload_dataloaders_every_epoch=True
