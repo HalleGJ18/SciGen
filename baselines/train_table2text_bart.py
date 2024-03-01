@@ -44,7 +44,7 @@ class SummarizationTrainer(BaseTransformer):
 
     def forward(self, input_ids, attention_mask=None, decoder_input_ids=None, lm_labels=None):
         return self.model(
-            input_ids, attention_mask=attention_mask, decoder_input_ids=decoder_input_ids, lm_labels=lm_labels,
+            input_ids, attention_mask=attention_mask, decoder_input_ids=decoder_input_ids, labels=lm_labels,,
         )
 
     def _step(self, batch):
